@@ -1,3 +1,4 @@
+use colored::*;
 use rand::Rng;
 use std::cmp::Ordering;
 use std::io;
@@ -16,15 +17,21 @@ fn main() {
             .read_line(&mut tentativa) //aqui eu não pude utilizar ";" pois o código seria extendido com o "." //aqui é utilizado o conceito de "buff" (não sei o que é)
             .expect("failed to read line");
 
-        let tentativa: u32 = tentativa.trim().parse(); //trim removerá espaços em branco //parse fará algo que eu não sei o que é// u32 é um número "não assinado"
+        //iremos sombrear a variável tentativa
+        // let tentativa: u32 = tentativa.trim().parse().expect("Por favor insira um número válido"); //trim removerá espaços em branco //parse fará algo que eu não sei o que é// u32 é um número "não assinado" //o "expect" será acionado quando um erro ocorrer
+        let tentativa: u32 = match tentativa.trim().parse() {
+            //aqui ao invés de utilizar "expect" eu utilizei "Err"
+            Ok(num) => num,
+            Err(_) => continue, //o "_" representa um valor genérico
+        };
 
         println!("Sua tentativa foi {}", tentativa);
 
         match tentativa.cmp(&naleatorio) {
-            Ordering::Less => println!("Número muito pequeno"),
-            Ordering::Greater => println!("Número muito grande"),
+            Ordering::Less => println!("{}", "Número muito pequeno".red()),
+            Ordering::Greater => println!("{}", "Número muito grande".red()),
             Ordering::Equal => {
-                println!("Você acertou! O número aleatório era {}!", naleatorio);
+                println!("{}", "Você acertou!".blue());
                 break;
             }
         }
